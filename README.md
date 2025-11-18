@@ -1,10 +1,11 @@
 # Assignment 6: AI-Powered Game Players
 
-- **Due:** TBD
+- **Due:** December 2, 2025 at 11:59 PM
 - **Points:** 100
 - **Submission:** Via GitHub (one per team)
 - **Prerequisites:** Assignment 5 (Design Patterns)
 - **Build Requirements:** Gradle 9.1.0, Java 21+
+- **GitHub Repository:** https://github.com/kousen/assignment-6-ai-players
 
 ## Overview
 

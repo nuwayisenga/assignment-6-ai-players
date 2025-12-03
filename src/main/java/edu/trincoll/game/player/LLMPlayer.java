@@ -69,7 +69,19 @@ public class LLMPlayer implements Player {
         //   "target": "character_name",
         //   "reasoning": "why this decision was made"
         // }
-        throw new UnsupportedOperationException("TODO 2: Implement LLM call and parse response");
+        Decision decision = chatClient.prompt()
+                .user(prompt)
+                .call()
+                .entity(Decision.class);
+
+        // Validate decision
+        if (decision.action() == null || decision.target() == null) {
+            System.out.println("[" + modelName + "] Invalid decision, using fallback");
+            return defaultAction(self, enemies);
+        }
+
+        //Log the LLM's reasoning
+        System.out.println("[" + modelName + "] Game state is " + decision.reasoning());
 
         // TODO 3: Convert Decision to GameCommand (10 points)
         // Based on the decision.action(), create the appropriate GameCommand:
@@ -183,6 +195,16 @@ public class LLMPlayer implements Player {
             .filter(c -> c.getName().equalsIgnoreCase(name))
             .findFirst()
             .orElse(characters.getFirst()); // Fallback to first if not found
+    }
+
+    private GameCommand defaultAction(Character self, List<Character> enemies) {
+        // Attack the weakest enemy
+        Character target = enemies.stream()
+                .filter(e -> e.getStats().health() > 0)
+                .min((e1, e2) -> Integer.compare(e1.getStats().health(), e2.getStats().health()))
+                .orElse(enemies.getFirst());
+
+        return new AttackCommand(self, target);
     }
 
     /**

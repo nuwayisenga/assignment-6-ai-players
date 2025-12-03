@@ -126,6 +126,9 @@ public class GameController {
 
         //Get player
         Player player = playerMap.get(character);
+        if(player == null) {
+            System.out.println("Player: " + character.getName() + " not found.");
+        }
 
         //Get decision
         GameCommand command = player.decideAction(character, allies, enemies, gameState);

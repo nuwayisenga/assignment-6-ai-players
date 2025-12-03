@@ -68,7 +68,14 @@ public class GameController {
      * Hint: Use processTurn() helper method for each character
      */
     public void playGame() {
+        System.out.println("\n" + "=".repeat(60));
+        System.out.println("GAME START!");
+        System.out.println("=".repeat(60));
+
+        displayTeamSetup();
+
         while (!isGameOver()) {
+            displayRoundHeader();
             for (Character character : team1) {
                 if (isGameOver()) {
                     break;
@@ -137,7 +144,7 @@ public class GameController {
         invoker.executeCommand(command);
 
         //Display result
-        displayActionResult(command);
+        displayActionResult(command, character);
 
         //Update state
         gameState = gameState.nextTurn()
@@ -159,6 +166,42 @@ public class GameController {
 
         return !team1Alive || !team2Alive;
     }
+
+    /**
+     * Displays team information
+     */
+    private void displayTeamSetup() {
+        System.out.println("\n=== Team Setup ===");
+        System.out.println("\nTeam 1:");
+        for (Character c : team1) {
+            Player p = playerMap.get(c);
+            String playerType = p.getClass().getSimpleName();
+            System.out.printf("  - %s (%s) - %s%n",
+                    c.getName(), c.getType(), playerType);
+        }
+    }
+
+    /**
+     * Displays round header.
+     */
+    private void displayRoundHeader() {
+        System.out.println("\n" + "=".repeat(60));
+        System.out.printf("TURN %d - ROUND %d%n",
+                gameState.turnNumber(), gameState.roundNumber());
+        System.out.println("=".repeat(60));
+
+        // Display current team status
+        System.out.println("\nTeam 1 Status:");
+        for (Character c : team1) {
+            displayCharacterStatus(c);
+        }
+
+        System.out.println("\nTeam 2 Status:");
+        for (Character c : team2) {
+            displayCharacterStatus(c);
+        }
+    }
+
 
     /**
      * Displays the game result.
@@ -191,6 +234,17 @@ public class GameController {
         System.out.println("Total commands executed: " + gameState.commandHistorySize());
     }
 
+    private void displayActionResult(GameCommand command, Character character) {
+        System.out.println("---");
+    }
+
+    private void displayRoundSummary() {
+        System.out.println("\n--- Round " + gameState.roundNumber() + " Complete ---");
+        System.out.println("Team 1: " + countAlive(team1) + "/" + team1.size() + " alive");
+        System.out.println("Team 2: " + countAlive(team2) + "/" + team2.size() + " alive");
+    }
+
+
     private void displayCharacterStatus(Character c) {
         String status = c.getStats().health() > 0 ? "Alive" : "Defeated";
         System.out.printf("  %s (%s): %d HP - %s%n",
@@ -198,5 +252,14 @@ public class GameController {
             c.getType(),
             Math.max(0, c.getStats().health()),
             status);
+    }
+
+    /**
+     * Counts alive characters
+     */
+    private int countAlive(List<Character> team) {
+        return (int) team.stream()
+                .filter(c -> c.getStats().health() > 0)
+                .count();
     }
 }

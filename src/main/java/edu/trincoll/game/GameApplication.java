@@ -138,7 +138,27 @@ public class GameApplication {
             ChatClient anthropicClient,
             ChatClient geminiClient) {
         // TODO 6: Implement team configuration
-        throw new UnsupportedOperationException("TODO 6: Implement team configuration");
+        //Team 1
+        Character humanWarrior = CharacterFactory.createWarrior("Bob");
+        Character aiMage = CharacterFactory.createMage("Wizard");
+        List<Character> team1 = List.of(humanWarrior, aiMage);
+
+        //Team 2
+        Character gptArcher = CharacterFactory.createArcher("Barbara");
+        Character claudeRogue = CharacterFactory.createRogue("B");
+        List<Character> team2 = List.of(gptArcher, claudeRogue);
+
+        //Map characters to players
+        Map<Character, Player> playerMap = new HashMap<>();
+        playerMap.put(humanWarrior, new HumanPlayer());
+        playerMap.put(aiMage, new RuleBasedPlayer());
+        playerMap.put(gptArcher, new LLMPlayer(openAiClient, "GPT-5"));
+        playerMap.put(claudeRogue, new LLMPlayer(anthropicClient, "Claude-Sonnet-4.5"));
+
+        GameController controller = new GameController(team1, team2, playerMap);
+        controller.playGame();
+        controller.displayResult();
+        return controller;
     }
 
     /**

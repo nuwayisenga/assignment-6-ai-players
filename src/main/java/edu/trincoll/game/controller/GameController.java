@@ -68,7 +68,31 @@ public class GameController {
      * Hint: Use processTurn() helper method for each character
      */
     public void playGame() {
-        throw new UnsupportedOperationException("TODO 4: Implement game loop");
+        while (!isGameOver()) {
+            for (Character character : team1) {
+                if (character.isAlive()) {
+                    processTurn(character, team1, team2);
+                }
+                if (isGameOver()) {
+                    break;
+                }
+            }
+            if (isGameOver()) {
+                break;
+            }
+
+            for(Character character : team2) {
+                if (character.isAlive()) {
+                    processTurn(character, team2, team1);
+                }
+                if (isGameOver()) {
+                    break;
+                }
+            }
+            gameState = gameState.nextRound();
+            displayRoundSummary();
+        }
+        displayResult();
     }
 
     /**
@@ -98,7 +122,23 @@ public class GameController {
         }
 
         // TODO 5: Get player and execute their decision
-        throw new UnsupportedOperationException("TODO 5: Process character turn");
+        System.out.println("\n" + character.getName() + "'s turn");
+
+        //Get player
+        Player player = playerMap.get(character);
+
+        //Get decision
+        GameCommand command = player.decideAction(character, allies, enemies, gameState);
+
+        //Execute
+        invoker.executeCommand(command);
+
+        //Display result
+        displayActionResult(command);
+
+        //Update state
+        gameState = gameState.nextTurn()
+                .withUndo(true, invoker.getCommandHistory().size());
     }
 
     /**

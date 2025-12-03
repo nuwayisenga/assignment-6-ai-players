@@ -70,11 +70,11 @@ public class GameController {
     public void playGame() {
         while (!isGameOver()) {
             for (Character character : team1) {
-                if (character.isAlive()) {
-                    processTurn(character, team1, team2);
-                }
                 if (isGameOver()) {
                     break;
+                }
+                if (character.isAlive()) {
+                    processTurn(character, team1, team2);
                 }
             }
             if (isGameOver()) {
@@ -82,11 +82,11 @@ public class GameController {
             }
 
             for(Character character : team2) {
-                if (character.isAlive()) {
-                    processTurn(character, team2, team1);
-                }
                 if (isGameOver()) {
                     break;
+                }
+                if (character.isAlive()) {
+                    processTurn(character, team2, team1);
                 }
             }
             gameState = gameState.nextRound();

@@ -119,7 +119,9 @@ public class GameApplication {
 
         // Team 2 players - Both LLM providers used as required
         playerMap.put(gptArcher, new LLMPlayer(openAiClient, "GPT-5"));
-        playerMap.put(claudeRogue, new LLMPlayer(anthropicClient, "Claude-Sonnet-4.5"));
+        playerMap.put(claudeRogue, new LLMPlayer(openAiClient, "gpt-4o-mini"));
+        //needs to be changed to use claude
+        //playerMap.put(claudeRogue, new LLMPlayer(anthropicClient, "Claude-Sonnet-4.5"));
 
         // Display team configuration
         displayTeamConfiguration(team1, team2, playerMap);

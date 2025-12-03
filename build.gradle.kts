@@ -75,3 +75,6 @@ tasks.named<JavaExec>("run") {
     standardInput = System.`in`
     args = project.findProperty("appArgs")?.toString()?.split("\\s+") ?: emptyList()
 }
+tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
+    standardInput = System.`in`
+}
